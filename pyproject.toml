@@ -1,0 +1,12 @@
+[tool.poetry]
+name = "dummy"
+version = "1.0.0"
+description = ""
+authors = []
+
+[tool.poetry.dependencies]
+python = ">=3.13,<3.14"
+
+[build-system]
+requires = []
+build-backend = "setuptools.build_meta"
