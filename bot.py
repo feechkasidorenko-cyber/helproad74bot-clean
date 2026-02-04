@@ -1,9 +1,14 @@
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Телеграм-бот для обработки заявок по ДТП с AI-агентом
 Адаптирован под Python 3.13 и python-telegram-bot 20+
 """
+
+import threading
+from http.server import BaseHTTPRequestHandler, HTTPServer
+
 
 import os
 import logging
@@ -844,6 +849,20 @@ def main() -> None:
         application.add_handler(conv_handler)
         application.add_error_handler(error_handler)
 
+
+class HealthHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"OK")
+
+def run_health_server():
+    server = HTTPServer(("0.0.0.0", 8000), HealthHandler)
+    server.serve_forever()
+
+threading.Thread(target=run_health_server, daemon=True).start()
+
+        
         # Запуск бота
         logger.info("🚀 Бот запущен. Ожидаю сообщения...")
         application.run_polling()
